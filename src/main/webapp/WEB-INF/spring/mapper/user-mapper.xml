@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="net.hyosun.love.persistance.UserDao">
+ 	<select id="selectAll" resultType="UserVO">
+ 		SELECT * FROM tbl_user
+ 	</select>
+ 	
+ 	<select id="findById" resultType="UserVO">
+ 		SELECT * FROM tbl_user 
+ 		WHERE username = #{username}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="UserVO">
+ 		INSERT INTO tbl_user(
+ 			username,
+ 			password,
+ 			nickname,
+ 			profile_img,
+ 			profile_up_img,
+ 			profile_bg
+ 		) VALUES (
+ 			#{username},
+ 			#{password},
+ 			#{nickname},
+ 			#{profile_img},
+ 			#{profile_up_img},
+ 			#{profile_bg}
+ 		)
+ 	</insert>
+ 	
+ 	<update id="update" parameterType="UserVO">
+ 		UPDATE tbl_user SET
+ 			password = #{password},
+ 			nickname = #{nickname},
+ 			profile_img = #{profile_img},
+ 			profile_up_img = #{profile_up_img},
+ 			profile_bg = #{profile_bg},
+ 			profile_up_bg = #{profile_up_bg}
+ 		WHERE username = #{username}
+ 	</update>
+ 	
+ 	<update  id="update2" parameterType="UserVO">
+	 	UPDATE tbl_user SET
+	 		nickname = #{nickname}
+	 	WHERE username = #{username}
+ 	</update>
+ 	
+ 	<update  id="pwUpdate" parameterType="UserVO">
+	 	UPDATE tbl_user SET
+	 		password = #{password}
+	 	WHERE username = #{username}
+ 	</update>
+
+ 	<update  id="fileUpLoad" parameterType="UserVO">
+	 	UPDATE tbl_user SET
+	 		profile_img = #{profile_img},
+	 		profile_up_img = #{profile_up_img}
+	 	WHERE username = #{username}
+ 	</update>
+ 	
+ 	<update  id="bg_UpLoad" parameterType="UserVO">
+	 	UPDATE tbl_user SET
+	 		profile_bg = #{profile_bg}
+	 		profile_up_bg = #{profile_up_bg}
+	 	WHERE username = #{username}
+ 	</update>
+ 	
+ 	<update  id="fileDelete" parameterType="UserVO">
+	 	UPDATE tbl_user
+			SET profile_up_img = NULL
+		WHERE username = #{username}
+ 	</update>
+ 	
+ 	<update  id="bg_Delete" parameterType="UserVO">
+	 	UPDATE tbl_user
+			SET profile_up_bg = NULL
+		WHERE username = #{username}
+ 	</update>
+ 	 	
+ 	<delete id="delete">
+ 		DELETE FROM tbl_user
+ 		WHERE username = #{username}
+ 	</delete>
+ 	
+ 	<select id="create_user_table">
+ 		create table IF NOT EXISTS tbl_user (
+			username varchar(30) 	primary key,
+		    password varchar(15)	not null,
+		    nickname varchar(10)	not null,
+		    profile_img VARCHAR(125),
+			profile_up_img VARCHAR(125),
+			profile_bg VARCHAR(125),
+			profile_up_bg VARCHAR(125),
+			role varchar(10)
+			)
+ 	</select>
+ 
+ </mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.hyosun.love.persistance.QnaDao">
+	<select id="selectAll" resultType="LikeVO">
+		SELECT * FROM tbl_like
+	</select>
+
+	<select id="findById" resultType="LikeVO">
+		SELECT * FROM tbl_like
+		WHERE like_id = #{like_id}
+	</select>
+
+	<insert id="insert" parameterType="LikeVO">
+		INSERT INTO tbl_like(
+		like_id,
+		username,
+		heart
+		) VALUES (
+		#{like_id},
+		#{username},
+		1
+		)
+	</insert>
+
+	<update id="update" parameterType="LikeVO">
+		UPDATE tbl_like SET
+		username = #{username}
+		WHERE like_id = #{like_id}
+	</update>
+
+
+	<delete id="delete">
+		DELETE FROM tbl_like
+		WHERE like_id = #{like_id} and c_seq = #{c_seq}
+	</delete> 
+
+	<select id="create_tbl_like">
+		create table IF NOT EXISTS tbl_like (
+		like_id bigint auto_increment primary key,
+		username varchar(30) not null,
+		heart varchar(500) 
+
+		)
+	</select>
+
+</mapper> 

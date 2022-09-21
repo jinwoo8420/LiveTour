@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="net.hyosun.love.persistance.ApplyDao">
+ 	<select id="selectAll" resultType="ApplyVO">
+ 		SELECT * FROM tbl_apply
+ 	</select>
+ 	
+ 	<select id="findById" resultType="ApplyVO">
+ 		SELECT * FROM tbl_apply
+ 		WHERE seq = #{seq}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="ApplyVO">
+ 		INSERT INTO tbl_apply(
+ 			seq,
+ 			Company,
+ 			Phone,
+ 			Rocal,
+ 			Cname,
+ 			Tel,
+ 			Biznum,
+ 			username
+ 		) VALUES (
+ 			#{seq},
+ 			#{Company},
+ 			#{Phone},
+ 			#{Rocal},
+ 			#{Cname},
+ 			#{Tel},
+ 			#{Biznum},
+ 			#{username}
+ 		)
+ 	</insert>
+ 	
+ 	<update id="update" parameterType="ApplyVO">
+ 		UPDATE tbl_apply SET
+ 			Phone = #{Phone},
+ 			Rocal = #{Rocal},
+ 			Cname = #{Cname},
+ 			Tel = #{Tel},
+ 			Biznum = #{Biznum},
+ 			username=#{username}
+ 		WHERE seq = #{seq}
+ 	</update>
+ 	
+ 	
+ 	<delete id="delete">
+ 		DELETE FROM tbl_apply
+ 		WHERE seq = #{seq}
+ 	</delete>
+ 	
+ 	<select id="create_apply_table">
+ 		create table IF NOT EXISTS tbl_apply (
+ 			seq bigint auto_increment primary key,
+			Company varchar(30) not null,
+		    Phone int	not null,
+		    Rocal varchar(10)	not null,
+		    Cname VARCHAR(5),
+			Tel int,
+			Biznum varchar(255),
+			username varchar(30) not null
+			)
+ 	</select>
+ 
+ </mapper>
