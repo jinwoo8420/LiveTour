@@ -371,24 +371,39 @@ img.weather_img {
 						<div class="col">
 							<a href="${rootPath}/user/profile-user">
 								<figure>
-									<img src="${rootPath}/static/img/sample/profile2.jpg" alt="" />
+									<c:if test="${not empty com.profile_up_img}">
+										<img class="profile-thumb-md align-self-center mr-2"
+											src="${rootPath}/upload/${com.profile_up_img}">
+									</c:if>
+
+									<c:if test="${empty com.profile_up_img}">
+										<img class="profile-thumb-md align-self-center mr-2"
+											src="${rootPath}/static/img/profile/no_img.jpeg">
+									</c:if>
 								</figure>
 							</a>
 						</div>
 
 						<div class="col">
-							<strong>${com.nickname}</strong> · <small class="grey">${com.reg_time}</small><br />
-							${com.comment}<br /> <small class="grey">좋아요
-								개 · <a href="#none" class="grey">답글달기</a>
+							<strong>${com.nickname}</strong> · <small class="grey">${com.reg_time}</small>
+							<strong style="display: none;">${com.username}</strong>
+
+							<br /> ${com.comment} <br /> <small class="grey">좋아요 개
+								· <a href="#none" class="grey">답글달기</a>
 							</small>
 						</div>
 						<div class="col">
 							<a href="#none" data-toggle="modal" data-target="#ellipsisModal">
 								<img src="${rootPath}/static/img/svg/icon-ellipsis.svg"
 								alt="메뉴더보기" />
-							</a> <br /> <a class="" href="#none"> <span
-								class="icon icon-good mt-2"></span>
-							</a>
+							</a> <br />
+
+							<form method="POST"
+								action="${rootPath}/detail/${COMMONDETAIL.contentid}/likeinsert">
+								<button class="" type="submit">
+									<span class="icon icon-good mt-2"></span>
+								</button>
+							</form>
 						</div>
 					</div>
 					<hr class="full mt-3 mb-3" />
@@ -401,10 +416,7 @@ img.weather_img {
 						<div class="modal-content modal-sm modal-xs">
 							<div class="modal-body">
 								<div class="list-group">
-									<a
-										href="${rootPath}/detail/detail/${COMMONDETAIL.contentid}/${com.c_seq}/comupdate"
-										class="list-group-item">수정하기</a> <a href="#"
-										class="list-group-item" data-dismiss="modal"
+									<a href="#" class="list-group-item" data-dismiss="modal"
 										data-toggle="modal" data-target="#delModal">삭제하기</a> <a
 										href="#" class="list-group-item" data-dismiss="modal">닫기</a>
 								</div>
@@ -418,8 +430,10 @@ img.weather_img {
 				<div class="modal fade" id="delModal" tabindex="-1"
 					aria-labelledby="delModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-sm modal-dialog-centered">
+					
 						<div class="modal-content">
 							<div class="modal-body text-center">
+								<p>${com.comment}</p>
 								<p>삭제하시겠습니까?</p>
 							</div>
 							<div class="modal-footer-btm">
@@ -501,27 +515,45 @@ img.weather_img {
 			<!-- Comment -->
 			<div class="tab_barwrap fixed-bottom">
 				<div class="container nopadding">
-					<form class="form-line" style="margin-top: 1px;" method="POST">
-						<div class="form-group row">
-							<div class="col-10">
-								<a href="story-add-photo" class="float-photo"> <img
-									src="${rootPath}/static/img/svg/icon-photo.svg" alt="사진"
-									class="icon-sm" />
-								</a> <input name="comment" type="text"
-									class="form-control no-line ml-4" id="inputName"
-									placeholder="댓글을 입력해주세요." value="${UPDATE.comment}"> <input
-									name="c_seq" type="hidden"
-									value="<c:out value="${UPDATE.c_seq}" default ="0"/>">
-								<input name="username" type="hidden" value="${USER.username}">
-								<input name="nickname" type="hidden" value="${USER.nickname}">
-								<input name="content_id" type="hidden" value="${COMMONDETAIL.contentid}">
+				
+					<c:if test="${empty USER}">
+						<div class="form-line" style="margin-top: 1px;">
+							<div class="form-group row">
+								<div class="col-10">
+									<p class="form-control no-line ml-4">댓글 입력은 로그인 필요</p>
+								</div>
 								
-							</div>
-							<div class="col-2 text-right">
-								<button class="btn btn-primary btn-sm-nav-tab">등록</button>
+								<div class="col-2 text-right">
+									<a class="btn btn-primary btn-sm-nav-tab" href="${rootPath}/user/login">로그인</a>
+								</div>
 							</div>
 						</div>
-					</form>
+					</c:if>
+				
+					<c:if test="${not empty USER}">
+						<form class="form-line" style="margin-top: 1px;" method="POST">
+							<div class="form-group row">
+								<div class="col-10">
+									<a href="story-add-photo" class="float-photo"> <img
+										src="${rootPath}/static/img/svg/icon-photo.svg" alt="사진"
+										class="icon-sm" />
+									</a>
+									 
+									<input name="comment" type="text"
+										class="form-control no-line ml-4" id="inputName"
+										placeholder="댓글을 입력해주세요.">
+									<input name="username" type="hidden" value="${USER.username}">
+									<input name="nickname" type="hidden" value="${USER.nickname}">
+									<input name="content_id" type="hidden"
+										value="${COMMONDETAIL.contentid}">
+	
+								</div>
+								<div class="col-2 text-right">
+									<button class="btn btn-primary btn-sm-nav-tab">등록</button>
+								</div>
+							</div>
+						</form>
+					</c:if>
 				</div>
 			</div>
 			<!-- /end Comment -->
@@ -753,7 +785,7 @@ img.weather_img {
 	</script>
 
 
-		<!--주소 복사 코드  -->
+		<!—주소 복사 코드  —>
 		<script>
 	function copy_to_clipboard() {  
 		  const copyText = document.querySelector('span.addr').textContent;

@@ -21,6 +21,7 @@ import net.hyosun.love.model.AroundVO;
 import net.hyosun.love.model.CommentVO;
 import net.hyosun.love.model.CommonDetailVO;
 import net.hyosun.love.model.FoodVO;
+import net.hyosun.love.model.LikeVO;
 import net.hyosun.love.model.LodgmentVO;
 import net.hyosun.love.model.TourListVO;
 import net.hyosun.love.model.UserVO;
@@ -29,7 +30,6 @@ import net.hyosun.love.service.AroundService;
 import net.hyosun.love.service.CommentService;
 import net.hyosun.love.service.DetailService;
 import net.hyosun.love.service.LikeService;
-import net.hyosun.love.service.UserService;
 import net.hyosun.love.service.WeatherService;
 
 @Slf4j
@@ -44,32 +44,30 @@ public class DetailController {
 
 	@Autowired
 	private WeatherService weatherService;
-	
-	@Autowired
-	private UserService userService;
- 
+
 	@Autowired
 	private CommentService commentService;
-	
-	//private LikeService likeService;
-	
-	@RequestMapping(value = "/detail/{contentid}",method=RequestMethod.GET)
-	public String tour_detail(@PathVariable("contentid") String contentid, Model model,HttpSession session)
+
+	@Autowired
+	private LikeService likeService;
+
+	@RequestMapping(value = "/detail/{contentid}", method = RequestMethod.GET)
+	public String tour_detail(@PathVariable("contentid") String contentid, Model model, HttpSession session)
 			throws IOException, ParseException {
-		
+
 		UserVO loginUser = (UserVO) session.getAttribute("USER");
-		
+
 		List<CommentVO> comment = commentService.findByContentId(contentid);
-		
-		for(CommentVO vo : comment) {
+
+		for (CommentVO vo : comment) {
 			String time = vo.getTime();
 			SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date reg_time = timeFormat.parse(time);
 			vo.setReg_time(calculateTime(reg_time));
 		}
-		
-		model.addAttribute("COMMENT",comment);
-		
+
+		model.addAttribute("COMMENT", comment);
+
 		TourListVO tourDetailVO = detailService.getTourDetail(contentid);
 		CommonDetailVO CommonDetailVO = detailService.getCommonDetail(contentid);
 		List<AroundVO> AroundList = aroundService.getDetailAround(CommonDetailVO.getMapx(), CommonDetailVO.getMapy(),
@@ -90,29 +88,39 @@ public class DetailController {
 		model.addAttribute("AROUNDLODGE", AroundLodgeList);
 		return "/detail/detail";
 	}
-	
-	@RequestMapping(value = "/detail/{contentid}",method=RequestMethod.POST)
-	public String tour_detail(@PathVariable("contentid") String contentid, @ModelAttribute("comment") CommentVO commentVO, Model model) {
-		
-//		@ModelAttribute("comment") CommentVO commentVO
-		
+
+	@RequestMapping(value = "/detail/{contentid}", method = RequestMethod.POST)
+	public String tour_detail(@PathVariable("contentid") String contentid,
+			@ModelAttribute("comment") CommentVO commentVO, Model model) {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		commentVO.setTime(timeFormat.format(date));
 		commentService.insert(commentVO);
-		
-//		model.addAttribute("TIME",calculateTime(date));
-		
+
 		return "redirect:/detail/detail/{contentid}";
 	}
-	
+
 	@RequestMapping(value = "detail/{contentid}/{c_seq}/comdelete")
 	public String CommentDelete(@PathVariable("contentid") String contentid, @PathVariable("c_seq") String c_seq) {
 		commentService.delete(c_seq);
-		
+
+		log.debug("TEST {}", c_seq);
+
 		return "redirect:/detail/detail/{contentid}";
 	}
-	
+
+//	@RequestMapping(value = "/detail/{contentid}/likeinsert",method=RequestMethod.GET)
+//	public String likeinsert(@PathVariable("contentid") String contentid) {
+//		return null;
+//	}
+
+	@RequestMapping(value = "/detail/{contentid}/likeinsert", method = RequestMethod.POST)
+	public String likeinsert(@PathVariable("contentid") String contentid, LikeVO likeVO) {
+		likeService.insert(likeVO);
+
+		return "redirect:/detail/detail/{contentid}";
+	}
+
 	private static class TIME_MAXIMUM {
 		public static final int SEC = 60;
 		public static final int MIN = 60;
@@ -120,15 +128,15 @@ public class DetailController {
 		public static final int DAY = 30;
 		public static final int MONTH = 12;
 	}
-	
+
 	public static String calculateTime(Date date) {
-		
+
 		long curTime = System.currentTimeMillis();
 		long regTime = date.getTime();
 		long diffTime = (curTime - regTime) / 1000;
-		
+
 		String msg = null;
-		
+
 		if (diffTime < TIME_MAXIMUM.SEC) {
 			// sec
 			msg = diffTime + "초 전";
@@ -149,44 +157,15 @@ public class DetailController {
 		}
 		return msg;
 	}
-	
 
 	@ModelAttribute("comment")
 	private CommentVO commentVO() {
 		Date date = new Date(System.currentTimeMillis());
-		
-		CommentVO comment = CommentVO.builder()
-						.time(calculateTime(date))
-						.build();
-		
+
+		CommentVO comment = CommentVO.builder().time(calculateTime(date)).build();
+
 		return comment;
 	}
-	
-	@RequestMapping(value = "/detail/{contentid}/{c_seq}/comupdate" ,method=RequestMethod.GET )
-	public String commentupdate(Model model , @PathVariable("contentid") String contentid, @PathVariable("c_seq") String c_seq) {
-		
-		
-		
-		CommentVO commentVO = commentService.findById(c_seq);
-		model.addAttribute("UPDATE",commentVO);
-		
-		return "/detail/detail";
-		
-	}
-	
-	@RequestMapping(value = "/detail/{contentid}/{c_seq}/comupdate" ,method=RequestMethod.POST )
-	public String commentupdate(@PathVariable("contentid") String contentid,@ModelAttribute("comment") CommentVO commentVO) {
-		
-		
-		commentService.update(commentVO);
-	
-		return "redirect:/detail/detail/{contentid}";
-		
-	}
-	
-
-
-	
 
 	@RequestMapping(value = "/detail-restaurant/{contentid}")
 	public String detail_restaurant(@PathVariable("contentid") String contentid, Model model)
@@ -240,7 +219,6 @@ public class DetailController {
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	public String detail() {
-		
 
 		return "/detail/detail";
 

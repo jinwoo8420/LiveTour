@@ -16,8 +16,7 @@
  	<select id="findByContentId" resultType="CommentVO">
  		SELECT * FROM  tbl_comment 
  		WHERE content_id = #{content_id}
- 		ORDER by time DESC
- 	
+ 		ORDER by time
  	</select>
  	
  	<insert id="insert" parameterType="CommentVO">
@@ -26,25 +25,17 @@
  			content_id,
  			nickname,
  			comment,
- 			time
+ 			time,
+ 			profile_up_img
  		) VALUES (
  			#{username},
  			#{content_id},
  			#{nickname},
  			#{comment},
- 			#{time}
+ 			#{time},
+ 			#{profile_up_img}
  		)
  	</insert>
- 	
- 	<update id="update" parameterType="CommentVO">
- 		UPDATE tbl_comment SET
- 			username = #{username},
- 			nickname = #{nickname},
- 			comment = #{comment},
- 			time = #{time}
- 		WHERE c_seq = #{c_seq}
- 	</update>
- 	
  	 	
  	<delete id="delete">
  		DELETE FROM tbl_comment
@@ -58,7 +49,8 @@
 			username varchar(30)	not null,
 		    nickname varchar(10)	not null,
 		 	comment  VARCHAR(125)	not null,
-		 	time	 varchar(20)	not null
+		 	time	 varchar(20)	not null,
+		 	profile_up_img varchar(125)
 			)
  	</select>
  

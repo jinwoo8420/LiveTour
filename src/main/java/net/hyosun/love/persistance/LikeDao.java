@@ -2,15 +2,15 @@ package net.hyosun.love.persistance;
 
 import java.util.List;
 
-import net.hyosun.love.model.ApplyVO;
 import net.hyosun.love.model.LikeVO;
 
 public interface LikeDao {
 
-	
 	public List<LikeDao> selectAll();
 
-	public ApplyVO findById(String id);
+	public LikeVO findById(String id);
+
+	public List<LikeVO> findByCommentId(long commentId);
 
 	public int insert(LikeVO vo);
 

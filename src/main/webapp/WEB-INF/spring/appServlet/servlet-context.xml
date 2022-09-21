@@ -19,26 +19,22 @@
 	<resources mapping="/static/**" location="/static/" />
 
 	<!-- jsp 파일에서 바라볼 upload 폴더 -->
-	<!--  <resources mapping="/upload/**" location="file:////home/hyosun/upload/" /> -->
-	<resources mapping="/upload/**" location="file:///Users/hyosun/Documents/upload/" /> 
-	<!-- <resources mapping="/upload/**" location="file:///c:/server/upload/" /> -->
+	<!-- <resources mapping="/upload/**" location="file:////home/hyosun/upload/" /> -->
+	<!-- <resources mapping="/upload/**" location="file:///Users/hyosun/Documents/upload/" /> -->
+	<resources mapping="/upload/**" location="file:///c:/server/upload/" />
 		
-	
 	<!-- 
 	<beans:bean id="upLoadFolder" class="java.lang.String">
 		<beans:constructor-arg value="/home/hyosun/upload" />
 	</beans:bean>  -->
 	
-	<beans:bean id="upLoadFolder" class="java.lang.String">
+	<!-- <beans:bean id="upLoadFolder" class="java.lang.String">
 		<beans:constructor-arg value="/Users/hyosun/Documents/upload" />
-	</beans:bean>
+	</beans:bean> -->
 	
-
-	
-<!-- 	 <beans:bean id="upLoadFolder" class="java.lang.String">
+	<beans:bean id="upLoadFolder" class="java.lang.String">
 		<beans:constructor-arg value="c:/server/upload" />
 	</beans:bean> 
- -->
 
 <!--
 	<beans:bean id="Biz_upLoadFolder" class="java.lang.String">

@@ -3,25 +3,32 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.hyosun.love.persistance.QnaDao">
-	<select id="selectAll" resultType="LikeVO">
-		SELECT * FROM tbl_like
+<mapper namespace="net.hyosun.love.persistance.LikeDao">
+	<select id="selectAll" resultType="commentVO">
+		SELECT * from tbl_comment
 	</select>
 
 	<select id="findById" resultType="LikeVO">
-		SELECT * FROM tbl_like
-		WHERE like_id = #{like_id}
+		SELECT *
+		from tbl_like
+		on 	like_id =#{like_id}	
+	</select>
+	
+	<select id="findByCommentId" resultType="LikeVO">
+		SELECT *
+		from tbl_like
+		on 	comment_id =#{comment_id}	
 	</select>
 
 	<insert id="insert" parameterType="LikeVO">
 		INSERT INTO tbl_like(
 		like_id,
-		username,
-		heart
+		commnet_id,
+		username
 		) VALUES (
 		#{like_id},
-		#{username},
-		1
+		#{comment_id},
+		#{username}
 		)
 	</insert>
 
@@ -40,10 +47,9 @@
 	<select id="create_tbl_like">
 		create table IF NOT EXISTS tbl_like (
 		like_id bigint auto_increment primary key,
-		username varchar(30) not null,
-		heart varchar(500) 
-
+		comment_id bigint not null,
+		username varchar(30) not null
 		)
 	</select>
 
-</mapper> 
+</mapper>
