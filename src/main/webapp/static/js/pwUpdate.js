@@ -68,6 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ok_msg(error, "사용 가능한 password");
     }
 
+    if (current.value === password.value) {
+      error_msg(error, "이전 비밀번호와 동일");
+      current.focus();
+      return false;
+    } else {
+      ok_msg(error, "사용 가능한 password");
+    }
+
     re_password?.addEventListener("input", (e) => {
       const current = e.currentTarget;
       const error = error_divs[div_index.re_password];
@@ -76,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ok_msg(error, "password 일치");
       } else {
         error_msg(error, "password 일치하지 않음");
+        current.focus();
+        return false;
       }
     });
   });
@@ -110,6 +120,23 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("password와 새 password 확인 값이 일치하지 않음");
       newpassword.value = "";
       re_password.value = "";
+      newpassword.focus();
+      return false;
+    }
+
+    if (
+      error_divs[div_index.password].innerText ===
+      "현재 비밀번호가 일치하지 않음"
+    ) {
+      alert("password 확인");
+      password.focus();
+      return false;
+    }
+
+    if (
+      error_divs[div_index.newpassword].innerText === "이전 비밀번호와 동일"
+    ) {
+      alert("이전 password와 동일 불가");
       newpassword.focus();
       return false;
     }

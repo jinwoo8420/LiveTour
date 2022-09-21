@@ -1,5 +1,7 @@
 package net.hyosun.love.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.hyosun.love.model.ApplyVO;
 import net.hyosun.love.model.QnaVO;
+import net.hyosun.love.model.UserVO;
 import net.hyosun.love.service.ApplyService;
 import net.hyosun.love.service.QnaService;
 
@@ -22,7 +25,7 @@ public class CsController {
 
 	@Autowired
 	private ApplyService applyService;
-	
+
 	@Autowired
 	private QnaService qnaService;
 
@@ -66,16 +69,19 @@ public class CsController {
 
 	@RequestMapping(value = "/cs-qna", method = RequestMethod.POST)
 	public String cs_qna(QnaVO quaVO) {
-		
+
 		qnaService.insert(quaVO);
-		log.debug("확인하기 {}",quaVO);
-		
-	
+
 		return "redirect:/cs/cs-qna-list";
 	}
 
 	@RequestMapping(value = "/cs-qna-list", method = RequestMethod.GET)
-	public String cs_qna_list() {
+	public String cs_qna_list(HttpSession session, Model model) {
+		UserVO userVO = (UserVO) session.getAttribute("USER");
+
+		List<QnaVO> qnaVO = qnaService.findByUsername(userVO.getUsername());
+
+		model.addAttribute("LIST", qnaVO);
 
 		return "/cs/cs-qna-list";
 	}

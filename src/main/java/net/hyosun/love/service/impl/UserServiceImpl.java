@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserVO findByNickname(String nickname) {
+		return userDao.findByNickname(nickname);
+	}
+
+	@Override
 	public int insert(UserVO vo) {
 		userDao.insert(vo);
 		return 0;
@@ -100,11 +105,6 @@ public class UserServiceImpl implements UserService {
 		}
 		userDao.insert(userVO);
 		return 0;
-	}
-
-	@Override
-	public UserVO findByNickname(String nickname) {
-		return userDao.findByNickname(nickname);
 	}
 
 	// nickname 만 업데이트 하기위해

@@ -20,5 +20,5 @@ public class QnaVO {
 	private String Tel;
 	private String Bizname;
 	private String username;
-
+	private boolean qna_check;
 }

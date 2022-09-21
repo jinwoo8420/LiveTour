@@ -66,8 +66,20 @@ public class MyController {
 		session.setAttribute("USER", uservo);
 
 		return "redirect:/my/my-profile-edit";
-
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/nicknamecheck", method = RequestMethod.GET)
+	public String nicknamecheck(String nickname) {
+		UserVO userVO = userService.findByNickname(nickname);
+
+		if (userVO == null) {
+			return "OK";
+		}
+
+		return "FAIL";
+	}
+	
 
 	// my/my-password 비밀번호 재설정페이지 띄우기
 	@RequestMapping(value = "my-password", method = RequestMethod.GET)

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -158,17 +159,17 @@ public class UserController {
 		return "/user/profile-user";
 	}
 
-	/*	@ResponseBody
-		@RequestMapping(value = "/nicknamecheck/{nickname}", method = RequestMethod.GET)
-		public String nicknamecheck(@PathVariable("nickname") String nickname) {
-			UserVO userVO = userService.findByNickname(nickname);
-	
-			if (userVO == null) {
-				return "OK";
-			}
-	
-			return "FAIL";
-		}*/
+	@ResponseBody
+	@RequestMapping(value = "/nicknamecheck", method = RequestMethod.GET)
+	public String nicknamecheck(String nickname) {
+		UserVO userVO = userService.findByNickname(nickname);
+
+		if (userVO == null) {
+			return "OK";
+		}
+
+		return "FAIL";
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/usernamecheck", method = RequestMethod.GET)

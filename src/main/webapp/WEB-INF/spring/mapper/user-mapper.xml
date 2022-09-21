@@ -13,6 +13,11 @@
  		WHERE username = #{username}
  	</select>
  	
+ 	<select id="findByNickname" resultType="UserVO">
+ 		SELECT * FROM tbl_user 
+ 		WHERE nickname = #{nickname}
+ 	</select>
+ 	
  	<insert id="insert" parameterType="UserVO">
  		INSERT INTO tbl_user(
  			username,

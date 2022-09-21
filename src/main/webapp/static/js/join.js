@@ -107,18 +107,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 중복검사 수행
-    // fetch(`${rootPath}/user/nicknamecheck/${current.value}`)
-    //   .then((res) => res.text())
-    //   .then((result) => {
-    //     // 서버에서 OK 문자열을 보내면 체크한 nickname은 사용 가능
-    //     if (result === "OK") {
-    //       const msg = "사용 가능한 nickname";
-    //       ok_msg(nickname_div, msg);
-    //     } else {
-    //       error_msg(nickname_div, "이미 가입 된 nickname");
-    //       nickname.focus();
-    //     }
-    //   });
+    fetch(`${rootPath}/user/nicknamecheck?nickname=${current.value}`)
+      .then((res) => res.text())
+      .then((result) => {
+        // 서버에서 OK 문자열을 보내면 체크한 nickname은 사용 가능
+        if (result === "OK") {
+          ok_msg(nickname_div, "사용 가능한 nickname");
+        } else {
+          error_msg(nickname_div, "이미 가입 된 nickname");
+          nickname.focus();
+          return false;
+        }
+      });
   }); // end nickname event
 
   btn_join?.addEventListener("click", () => {
@@ -171,6 +171,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (nickname.value === "") {
       alert("nickname 입력");
+      nickname.focus();
+      return false;
+    }
+
+    if (error_divs[div_index.username].innerText === "이미 등록된 email") {
+      alert("email 중복 확인");
+      username.focus();
+      return false;
+    }
+
+    if (error_divs[div_index.nickname].innerText === "이미 가입 된 nickname") {
+      alert("nickname 중복 확인");
       nickname.focus();
       return false;
     }

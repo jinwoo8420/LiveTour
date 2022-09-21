@@ -27,8 +27,12 @@ public class QnaServiceImpl implements QnaService {
 	}
 
 	@Override
+	public List<QnaVO> findByUsername(String username) {
+		return qnaDao.findByUsername(username);
+	}
+
+	@Override
 	public int delete(String id) {
-		qnaDao.delete(id);
 		return 0;
 	}
 
@@ -39,14 +43,12 @@ public class QnaServiceImpl implements QnaService {
 
 	@Override
 	public int update(QnaVO vo) {
-		qnaDao.update(vo);
 		return 0;
 	}
 
 	@Bean
 	public void create_tbl_qna() {
 		qnaDao.create_tbl_qna();
-
 	}
 
 }

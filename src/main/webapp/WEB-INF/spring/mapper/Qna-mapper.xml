@@ -12,6 +12,11 @@
 		SELECT * FROM tbl_qna
 		WHERE seq = #{seq}
 	</select>
+	
+	<select id="findByUsername" resultType="QnaVO">
+		SELECT * FROM tbl_qna
+		WHERE username = #{username}
+	</select>
 
 	<insert id="insert" parameterType="QnaVO">
 		INSERT INTO tbl_qna(
@@ -20,27 +25,21 @@
 		Memo,
 		Tel,
 		Bizname,
-		username
+		username,
+		qna_check
 		) VALUES (
 		#{seq},
 		#{Category},
 		#{Memo},
 		#{Tel},
 		#{Bizname},
-		#{username}
+		#{username},
+		#{qna_check}
 		)
 	</insert>
 
 	<update id="update" parameterType="QnaVO">
-		UPDATE tbl_qna SET
-		Category = #{Category},
-		Memo = #{Memo},
-		Tel = #{Tel},
-		Bizname = #{Bizname},
-		username = #{username}
-		WHERE seq = #{seq}
 	</update>
-
 
 	<delete id="delete">
 		DELETE FROM tbl_qna
@@ -54,9 +53,9 @@
 		Memo varchar(255) not null,
 		Tel varchar(20) not null,
 		Bizname VARCHAR(255) not null,
-		username varchar(30) not null
-
-		)
+		username varchar(30) not null,
+		qna_check boolean default false
+	)
 	</select>
 
 </mapper>
