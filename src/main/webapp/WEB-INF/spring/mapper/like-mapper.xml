@@ -4,50 +4,49 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.hyosun.love.persistance.LikeDao">
-	<select id="selectAll" resultType="commentVO">
-		SELECT * from tbl_comment
+	<select id="selectAll" resultType="LikeVO">
+		SELECT * from tbl_like
 	</select>
 
 	<select id="findById" resultType="LikeVO">
-		SELECT *
-		from tbl_like
-		on 	like_id =#{like_id}	
+		SELECT * from tbl_like
+		where like_id = #{like_id}
 	</select>
-	
-	<select id="findByCommentId" resultType="LikeVO">
-		SELECT *
+
+	<select id="findByC_seq" resultType="LikeVO">
+		SELECT count(*)
 		from tbl_like
-		on 	comment_id =#{comment_id}	
+		where c_seq = #{c_seq} and content_id = #{content_id}
+		group by c_seq;
 	</select>
 
 	<insert id="insert" parameterType="LikeVO">
 		INSERT INTO tbl_like(
-		like_id,
-		commnet_id,
-		username
+			like_id,
+			c_seq,
+			content_id,
+			username
 		) VALUES (
-		#{like_id},
-		#{comment_id},
-		#{username}
+			#{like_id},
+			#{c_seq},
+			#{content_id},
+			#{username}
 		)
 	</insert>
 
 	<update id="update" parameterType="LikeVO">
-		UPDATE tbl_like SET
-		username = #{username}
-		WHERE like_id = #{like_id}
 	</update>
-
 
 	<delete id="delete">
 		DELETE FROM tbl_like
-		WHERE like_id = #{like_id} and c_seq = #{c_seq}
-	</delete> 
+		where like_id = #{like_id}
+	</delete>
 
 	<select id="create_tbl_like">
 		create table IF NOT EXISTS tbl_like (
 		like_id bigint auto_increment primary key,
-		comment_id bigint not null,
+		c_seq bigint not null,
+		content_id VARCHAR(20) NOT NULL,
 		username varchar(30) not null
 		)
 	</select>

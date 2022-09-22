@@ -1,88 +1,101 @@
 var container = document.getElementById("map");
 var options = {
+  // 중심좌표 / api 호출 시 필수
   center: new kakao.maps.LatLng(37.7899352, 127.5258072),
+  //확대 사이즈 level.
   level: 7,
 };
+
+//지도를 띄우기 container에 option 에 맞는 지도를 띄우기
 var map = new kakao.maps.Map(container, options);
 
-// 현재 위치
+
+// GPS 로 받아온 현재 위치 
 var currentPos;
 
+
 // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+//geolocation : GPS 기능
 if (navigator.geolocation) {
   // GeoLocation을 이용해서 접속 위치를 얻어옵니다
   navigator.geolocation.getCurrentPosition(function (position) {
     var lat = position.coords.latitude, // 위도
       lon = position.coords.longitude; // 경도
 
+    // GPS로 받아온 현재위치를 담았다.
     currentPos = new kakao.maps.LatLng(lat, lon);
 
-    var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-      message = '<div style="padding:5px;">현위치</div>'; // 인포윈도우에 표시될 내용입니다
-
-    // 마커와 인포윈도우를 표시합니다
-    displayMarker(locPosition, message);
+    var locPosition = new kakao.maps.LatLng(lat, lon);// 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+      
+    // 마커 표시합니다.
+    displayMarker(locPosition);
   });
 } else {
   // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+  var locPosition = new kakao.maps.LatLng(37.7899352, 127.5258072);
 
-  var locPosition = new kakao.maps.LatLng(37.7899352, 127.5258072),
-    message = "현재 위치를 알 수 없어 기본 위치로 이동합니다.";
-
-  displayMarker(locPosition, message);
+  displayMarker(locPosition);
 }
 
-function displayMarker(locPosition, message) {
+
+
+// GPS로 받아온 현위치에 마커를 표시
+function displayMarker(locPosition){
+  //현위치를 표시할 이미지를 가져온다
   var imageSrc = document.querySelector("img#pointer-me").src;
-  var imageSize = new kakao.maps.Size(24, 35);
+  //사이즈 설정
+  var imageSize = new kakao.maps.Size(30, 35);
+  //마커 이미지 지정 및 사이즈 설정
   var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-  // 마커를 생성합니다
+
+  // 마커를 생성합니다.
   var marker = new kakao.maps.Marker({
+    // 마커를 띄울 map 지정
     map: map,
+    // GPS 로 받아온 현위치 좌표를 position 에 저장 
     position: locPosition,
+
+    // 마커 이미지
     image: markerImage,
   });
 
-  var iwContent = message, // 인포윈도우에 표시할 내용
-    iwRemoveable = true;
-
-  // 인포윈도우를 생성합니다
-  var infowindow = new kakao.maps.InfoWindow({
-    content: iwContent,
-    removable: iwRemoveable,
-  });
-
-  // 인포윈도우를 마커위에 표시합니다
-  infowindow.open(map, marker);
-
-  // 지도 중심좌표를 접속위치로 변경합니다
+  // 지도 중심좌표를 접속위치로 변경합니다. 
   map.setCenter(locPosition);
 }
 
+// 키워드 검색 결과를 띄워줄 마커를 배열로 선언
 var markers = [];
 
-// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+// 마커에 마우스를 올렸을때  장소명을 표출할 인포윈도우를 생성합니다
 var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
+
+// 관광지 키워드 검색
 function tourKeywordSearch() {
   // 장소 검색 객체를 생성합니다
   var ps = new kakao.maps.services.Places();
 
+  // 관광지 키워드 추출 
   var val_tour = document.querySelector("span#val_tour").innerText;
 
   // 검색 옵션 객체
   var searchOption = {
+    //키워드 검색 기준위치를 GPS 로 받아온 현재 위치로 지정
     location: currentPos,
-    radius: 1000,
+    //검색결과 범위지정
+    radius: 2000,
+    //검색결과 개수
     size: 15,
   };
-
+  
   // 키워드로 장소를 검색합니다
   searchPlaces();
 
-  // 키워드 검색을 요청하는 함수입니다
+
+  // 키워드 검색을 요청하는 함수입니다.
   function searchPlaces() {
+    // 검색 키워드가 없을시 
     if (!val_tour.replace(/^\s+|\s+$/g, "")) {
       alert("키워드를 입력해주세요!");
       return false;
@@ -98,6 +111,7 @@ function tourKeywordSearch() {
       // 정상적으로 검색이 완료됐으면
       // 검색 목록과 마커를 표출합니다
       resultMarker(data);
+      // data : 검색결과 
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       alert("검색 결과가 존재하지 않습니다.");
       return;
@@ -111,8 +125,9 @@ function tourKeywordSearch() {
   function resultMarker(places) {
     var bounds = new kakao.maps.LatLngBounds();
 
-    // 지도에 표시되고 있는 마커를 제거합니다
+    // 지도에 표시되고 있던 마커를 제거합니다
     removeMarker();
+
 
     for (var i = 0; i < places.length; i++) {
       // 마커를 생성하고 지도에 표시합니다
@@ -122,6 +137,7 @@ function tourKeywordSearch() {
       // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
       // LatLngBounds 객체에 좌표를 추가합니다
       bounds.extend(placePosition);
+
 
       // 마커와 검색결과 항목에 mouseover 했을때
       // 해당 장소에 인포윈도우에 장소명을 표시합니다
@@ -137,6 +153,7 @@ function tourKeywordSearch() {
       })(marker, places[i].place_name);
     }
 
+    
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
     map.setBounds(bounds);
   }
@@ -364,7 +381,7 @@ function removeMarker() {
 // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 // 인포윈도우에 장소명을 표시합니다
 function displayInfowindow(marker, title) {
-  var content = '<div style="padding:5px;z-index:1;">' + title + "</div>";
+  var content = '<div style="padding:5px 10px;z-index:1;border-radius:5px;">' + title + "</div>";
 
   infowindow.setContent(content);
   infowindow.open(map, marker);

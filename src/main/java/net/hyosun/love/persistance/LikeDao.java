@@ -6,11 +6,11 @@ import net.hyosun.love.model.LikeVO;
 
 public interface LikeDao {
 
-	public List<LikeDao> selectAll();
+	public List<LikeVO> selectAll();
 
 	public LikeVO findById(String id);
 
-	public List<LikeVO> findByCommentId(long commentId);
+	public List<LikeVO> findByC_seq(String c_seq);
 
 	public int insert(LikeVO vo);
 

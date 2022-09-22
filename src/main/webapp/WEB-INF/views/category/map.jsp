@@ -54,6 +54,7 @@
 							<span class="play-live"></span>
 						</figure> <span>라이브</span></a></li>
 
+				<!-- 1.키워드 검색을 위한 form tag -->
 				<li class="active"><form>
 						<a id="btn_tour" href="#none" onclick="return tourKeywordSearch()"><figure
 								class="bg1">
@@ -81,12 +82,13 @@
 				</li>
 
 			</ul>
+			<!-- 지도 div -->
 			<div id="map">
-			
-				<img id="tour_img" src="${rootPath}/static/img/svg/marker-tour.svg" style="display: none;">
-				<img id="food_img" src="${rootPath}/static/img/svg/marker-restaurant.svg" style="display: none;">
-				<img id="lodge_img" src="${rootPath}/static/img/svg/marker-lodge.svg" style="display: none;">
-				<img id="pointer-me" src="${rootPath}/static/img/svg/marker-me.svg" style="display: none;" />
+				<!-- 스크립트에서는 로컬파일을 직접적으로 가져오는것이 보안상에 문제로 안된다. 그래서 이미지 태그에 src를 추출을했다 -->
+				<img id="tour_img" src="${rootPath}/static/img/tour-marker.png" style="display: none;">
+				<img id="food_img" src="${rootPath}/static/img/food-marker.png" style="display: none;">
+				<img id="lodge_img" src="${rootPath}/static/img/lodge-marker.png" style="display: none;">
+				<img id="pointer-me" src="${rootPath}/static/img/marker-me.png" style="display: none;" />
 				
 				<!-- 마커아이콘 -->
 				<%-- <a href="#none" data-toggle="modal" data-target="#infoModal"><div class="marker bg1" style="position:absolute; top:100px; left:120px;"><figure><img src="${rootPath}/static/img/svg/marker-tour.svg" alt="관광지"/></figure><strong>남이섬 남이나루</strong></div></a>
@@ -98,9 +100,10 @@
 				 --%>
 				<!-- / 마커아이콘-->
 				
+				<!-- kakao api 인증 요청 -->
 				<script
 					src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f03c88bcd77572e88d422c4306a16404&libraries=services"></script>
-				<script src="${rootPath}/static/js/Kakaomap.js?ver=9"></script>
+				<script src="${rootPath}/static/js/Kakaomap.js?ver=22"></script>
 			</div>
 		</div>
 	</div>

@@ -7,13 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/*
- * 댓글에 like를 하려면
- * 
- * 댓글에 대한 key
- * like 를 클릭한 username
- */
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,7 +14,8 @@ import lombok.ToString;
 @ToString
 @Builder
 public class LikeVO {
-	private int like_id;
-	private int comment_id;
+	private String like_id;
+	private String c_seq;
+	private String content_id;
 	private String username;
 }

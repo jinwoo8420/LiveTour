@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class CommentVO {
-	private long c_seq;
+	private String c_seq;
 	private String content_id;
 	private String username;
 	private String comment;

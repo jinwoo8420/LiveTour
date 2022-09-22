@@ -3,6 +3,7 @@ package net.hyosun.love.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import net.hyosun.love.model.LikeVO;
@@ -13,48 +14,43 @@ import net.hyosun.love.service.LikeService;
 public class LikeServiceImpl implements LikeService {
 
 	@Autowired
-	private LikeService likeService;
+	private LikeDao likeDao;
 
 	@Override
-	public List<LikeDao> selectAll() {
-
-		// TODO Auto-generated method stub
-		return likeService.selectAll();
+	public List<LikeVO> selectAll() {
+		return likeDao.selectAll();
 	}
 
 	@Override
 	public LikeVO findById(String id) {
-		// TODO Auto-generated method stub
-		return likeService.findById(id);
+		return likeDao.findById(id);
 	}
 
 	@Override
-	public List<LikeVO> findByCommentId(long commentId) {
-		return likeService.findByCommentId(commentId);
+	public List<LikeVO> findByC_seq(String c_seq) {
+		return likeDao.findByC_seq(c_seq);
 	}
 
 	@Override
 	public int insert(LikeVO vo) {
-		likeService.insert(vo);
+		likeDao.insert(vo);
 		return 0;
 	}
 
 	@Override
 	public int update(LikeVO vo) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int delete(String id) {
-		likeService.delete(id);
+		likeDao.delete(id);
 		return 0;
 	}
 
-	@Override
+	@Bean
 	public void create_tbl_like() {
-
-		likeService.create_tbl_like();
+		likeDao.create_tbl_like();
 	}
 
 }
