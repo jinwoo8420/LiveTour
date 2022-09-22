@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import net.hyosun.love.model.CommentVO;
+import net.hyosun.love.model.LikeVO;
 import net.hyosun.love.model.UserVO;
 import net.hyosun.love.persistance.CommentDao;
+import net.hyosun.love.persistance.LikeDao;
 import net.hyosun.love.persistance.UserDao;
 import net.hyosun.love.service.CommentService;
 
@@ -17,6 +19,9 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	private CommentDao commentDao;
+	
+	@Autowired
+	private LikeDao likeDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -38,6 +43,10 @@ public class CommentServiceImpl implements CommentService {
 		vo.setProfile_up_img(userVO.getProfile_up_img());
 		
 		commentDao.insert(vo);
+		
+		LikeVO likeVO = LikeVO.builder().c_seq(vo.getC_seq()).content_id(vo.getContent_id()).username(vo.getUsername()).build();
+		
+		likeDao.insert(likeVO);
 		
 		return 0;
 	}

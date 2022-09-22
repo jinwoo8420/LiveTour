@@ -86,15 +86,18 @@ public class DetailController {
 		model.addAttribute("AROUND", AroundList);
 		model.addAttribute("AROUNDFOOD", AroundFoodList);
 		model.addAttribute("AROUNDLODGE", AroundLodgeList);
+		
 		return "/detail/detail";
 	}
 
 	@RequestMapping(value = "/detail/{contentid}", method = RequestMethod.POST)
 	public String tour_detail(@PathVariable("contentid") String contentid,
 			@ModelAttribute("comment") CommentVO commentVO, Model model) {
+		
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		commentVO.setTime(timeFormat.format(date));
+		
 		commentService.insert(commentVO);
 
 		return "redirect:/detail/detail/{contentid}";
@@ -104,19 +107,12 @@ public class DetailController {
 	public String CommentDelete(@PathVariable("contentid") String contentid, @PathVariable("c_seq") String c_seq) {
 		commentService.delete(c_seq);
 
-		log.debug("TEST {}", c_seq);
-
 		return "redirect:/detail/detail/{contentid}";
 	}
-
-//	@RequestMapping(value = "/detail/{contentid}/likeinsert",method=RequestMethod.GET)
-//	public String likeinsert(@PathVariable("contentid") String contentid) {
-//		return null;
-//	}
-
-	@RequestMapping(value = "/detail/{contentid}/likeinsert", method = RequestMethod.POST)
-	public String likeinsert(@PathVariable("contentid") String contentid, LikeVO likeVO) {
-		likeService.insert(likeVO);
+	
+	@RequestMapping(value = "detail/{contentid}/{like_id}/likedelete")
+	public String LikeDelete(@PathVariable("contentid") String contentid, @PathVariable("like_id") String like_id) {
+		likeService.delete(like_id);
 
 		return "redirect:/detail/detail/{contentid}";
 	}
@@ -215,26 +211,5 @@ public class DetailController {
 		model.addAttribute("AROUNDTOUR", AroundTourList);
 		model.addAttribute("AROUNDFOOD", AroundFoodList);
 		return "/detail/detail-lodge";
-	}
-
-	@RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public String detail() {
-
-		return "/detail/detail";
-
-	}
-
-	@RequestMapping(value = "/detail-restaurant", method = RequestMethod.GET)
-	public String detail_restautant() {
-
-		return "/detail/detail-restaurant";
-
-	}
-
-	@RequestMapping(value = "/detail-lodge", method = RequestMethod.GET)
-	public String detail_lodge() {
-
-		return "/detail/detail-lodge";
-
 	}
 }

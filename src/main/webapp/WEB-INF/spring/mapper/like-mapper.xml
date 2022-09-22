@@ -44,10 +44,10 @@
 
 	<select id="create_tbl_like">
 		create table IF NOT EXISTS tbl_like (
-		like_id bigint auto_increment primary key,
-		c_seq bigint not null,
-		content_id VARCHAR(20) NOT NULL,
-		username varchar(30) not null
+		like_id		bigint		auto_increment primary key,
+		c_seq		bigint		not null,
+		content_id	VARCHAR(20)	NOT NULL,
+		username	varchar(30)	not null
 		)
 	</select>
 
